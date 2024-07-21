@@ -8,9 +8,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardModule } from './apis/boards/boards.module';
 import { ProductsModule } from './apis/products/products.module';
 import { UsersModule } from './apis/users/user.module';
+import { AuthModule } from './apis/auth/auth.module';
 
 @Module({
     imports: [
+        AuthModule,
         UsersModule,
         BoardModule,
         ProductsModule,
