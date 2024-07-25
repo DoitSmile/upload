@@ -19,17 +19,25 @@ let AuthService = class AuthService {
         this.userService = userService;
         this.jwtService = jwtService;
     }
-    async login({ email, password }) {
+    async login({ email, password, context }) {
         const user = await this.userService.findOneByEmail({ email });
         if (!user)
             throw new common_1.UnprocessableEntityException('이메일이 없습니다.');
         const isAuth = await bcrypt.compare(password, user.password);
         if (!isAuth)
             throw new common_1.UnprocessableEntityException('비밀번호가 일치하지 않습니다.');
+        this.setRefreshToken({ user, context });
+        return this.getAccessToken({ user });
+    }
+    setRefreshToken({ user, context }) {
+        const refreshToken = this.jwtService.sign({ sub: user.id }, { secret: '나의리프레시비밀번호', expiresIn: '2w' });
+        context.res.setHeader('set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    }
+    restoreAccessToken({ user }) {
         return this.getAccessToken({ user });
     }
     getAccessToken({ user }) {
-        return this.jwtService.sign({ sub: user.id }, { secret: '내비밀번호', expiresIn: '1h' });
+        return this.jwtService.sign({ sub: user.id }, { secret: '나의 비밀번호', expiresIn: '10s' });
     }
 };
 exports.AuthService = AuthService;

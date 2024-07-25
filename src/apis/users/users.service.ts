@@ -19,7 +19,7 @@ export class UserService {
         return this.userRepository.findOne({ where: { email } });
     }
 
-    async create({ email, password, name, age }: IUserCreate) {
+    async create({ email, password, name, age }: IUserCreate): Promise<User> {
         const user = await this.findOneByEmail({ email }); // 중복 이메일 방지
         if (user) throw new ConflictException('이미 등록된 이메일입니다.');
         const hashedPassword = await bcrypt.hash(password, 10); // 원본 password를 10회 salt 시켜줌

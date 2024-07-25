@@ -16,9 +16,17 @@ exports.UserResolver = void 0;
 const graphql_1 = require("@nestjs/graphql");
 const users_entity_1 = require("./entities/users.entity");
 const users_service_1 = require("./users.service");
+const common_1 = require("@nestjs/common");
+const gql_auth_guard_1 = require("../auth/guards/gql-auth.guard");
 let UserResolver = class UserResolver {
     constructor(userService) {
         this.userService = userService;
+    }
+    fetchUser(context) {
+        console.log('================');
+        console.log(context.req.user);
+        console.log('================');
+        return '인가에 성공했습니다.';
     }
     async createUser(email, password, name, age) {
         return await this.userService.create({
@@ -30,6 +38,14 @@ let UserResolver = class UserResolver {
     }
 };
 exports.UserResolver = UserResolver;
+__decorate([
+    (0, common_1.UseGuards)((0, gql_auth_guard_1.GqlAuthGuard)('access')),
+    (0, graphql_1.Query)(() => String),
+    __param(0, (0, graphql_1.Context)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", String)
+], UserResolver.prototype, "fetchUser", null);
 __decorate([
     (0, graphql_1.Mutation)(() => users_entity_1.User),
     __param(0, (0, graphql_1.Args)('email')),

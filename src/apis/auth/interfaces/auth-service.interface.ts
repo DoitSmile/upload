@@ -1,10 +1,21 @@
 import { User } from 'src/apis/users/entities/users.entity';
+import { IAuthUser, IContext } from 'src/commons/interfaces/context';
 
 export interface IAuthService {
     email: string;
     password: string;
+    context: IContext;
 }
 
 export interface IAuthServiceGetAccessToken {
-    user: User; // 해당 user의 id를 가지고 올 것이기에 User 타입으로 지정해줌
+    user: User | IAuthUser['user'];
+}
+
+export interface IAuthServiceSetRefreshToken {
+    user: User;
+    context: IContext;
+}
+
+export interface IAuthServiceRestoreAccessToken {
+    user: IAuthUser['user'];
 }
