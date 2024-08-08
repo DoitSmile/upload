@@ -21,7 +21,7 @@ services:
         # platform: linux/86_64
         image: mysql:latest
         environment:
-            MYSQL_DATABASE: 'mydocker'
+            MYSQL_DATABASE: 'practice'
             MYSQL_ROOT_PASSWORD: '12345678'
         ports:
             - 3306:3306
